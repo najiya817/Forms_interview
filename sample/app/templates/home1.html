@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Title</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+</head>
+  <body>
+<form action="">
+    <div id="form-container">
+        <div>
+            <div class="row" style="margin-left:1px ;">
+                <div class="col-3">
+                    <label for={{i.name.label}}>Name</label>
+                    {{registerform.name}}
+                </div>
+                <div class="col-3">
+                    <label for={{i.name.label}}>Email</label>
+                    {{registerform.email}}
+                </div>
+                </div>
+        </div>
+        {{formset.management_form}}
+        <div class="inp-form">
+            {% for i in formset %}
+            <div class="row" style="margin-left:1px ;">
+                <div class="col-3">
+                    <label for={{i.name.label}}>Degree</label>
+                    {{i.degree}}
+                </div>
+                <div class="col-3">
+                    <label for={{i.name.label}}>University</label>
+                    {{i.university}}
+                </div>
+                <div class="col-3">
+                    <label for={{i.name.label}}>Year Number</label>
+                    {{i.year}}
+                </div>
+                <div class="col" style="margin: 30px 0px 0px 0px;">
+                    <button class="btn btn-primary btn-xs remove_form"   
+                    name="form-0-button"><span>&minus;</span></button>
+                </div>
+               
+                
+            </div>
+
+            {% endfor %}
+        </div>
+        <button class="btn btn-primary btn-xs" id="add-form-row" style="margin:10px 0px 0px 20px;"><span>&plus;</span></button>
+        <button type="submit">submit</button>
+    </div>
+</form>
+    <script>
+        $(document).ready(function(){
+            $("#add-form-row").click(function(){
+                var formset = $("#form-container")
+                var newForm = formset.find(".inp-form:last").clone()
+                var totalForms = parseInt(formset.find("#id_form-TOTAL_FORMS").val());
+                newForm.find(':input').each(function() {
+                    var name = $(this).attr('name').replace('-' + (totalForms-1) + '-', '-' + totalForms + '-');
+                    $(this).attr('name', name).attr('id', name);
+                    $(this).val('');
+                });
+                newForm.find(".remove_form").click(function(){
+                    $(this).closest('.inp-form').remove();
+                    totalForms--;
+                    formset.find('#id_form-TOTAL_FORMS').val(totalForms);
+                })
+            totalForms++;
+            formset.find('#id_form-TOTAL_FORMS').val(totalForms);
+            newForm.insertBefore("#add-form-row");
+            return false;
+            });
+        });
+    </script>
+
+  </body>
+</html>
