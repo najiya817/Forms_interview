@@ -9,10 +9,10 @@ class RegisterForm(forms.ModelForm):
         fields = ["name", "email"]
         widgets = {
             "name": forms.TextInput(
-                attrs={"required": True}
+                attrs={"required": True,"class":"form-control"}
             ),
             "email": forms.EmailInput(
-                attrs={"class": "custom-email-widget", "required": True}
+                attrs={"class": "custom-email-widget form-control", "required": True}
             ),
         }
 
@@ -34,11 +34,11 @@ CourseFormset=formset_factory(CourseForm,extra=1)
 
 CourseModelFormset = modelformset_factory(
     Courses,
-    fields=(
+    fields=[
         "degree",
         "university",
         "year",
-    ),
+    ],
     extra=1,
     widgets={
         "degree": forms.TextInput(
