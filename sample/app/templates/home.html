@@ -26,70 +26,84 @@
 </head>
 
 <body>
-    <div class="row">
-        <div class="col-2"></div>
-        <div class="col-8 container jumbotron">
-            <form action="{% url 'home' %}" method="post" id="myForm">
-                {% csrf_token %}
+  
 
-                <table> {{ registerform.as_table }}
-                </table>
-
-
-                <!-- <input type="text" placeholder="Name" name="name" id="reg" required>
-                <input type="email" placeholder="Email" name="email" id="reg" required> -->
-                <br><br><br>
-                <div id="education-section">
-                    <div class="education-input">
-                        {{ formset.management_form }}
-
-                        {% for form in formset %}
-                        <table> {{ form.as_table}}
-                          
-                            <button type="button" class="btn btn-sm btn-info remove-education"><span>&minus;</span></button><br>
-                        </table>
-                        {% endfor %}
-                        <!-- <input type="text" placeholder="Degree" name="degree" id="nameInput" required>
-                        <input type="text" placeholder="University" name="university" id="emailInput" required>
-                        <input type="number" placeholder="Year" name="year" id="info" required>
-                        <button type="button" class="btn btn-sm btn-info remove-education"><span>&minus;</span></button><br> -->
+<div class="container">
+    <form method="POST" >
+        {% csrf_token %}   
+        <div class="row mb-3">
+            <div class="col-md-6 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <label  class="form-label">Name</label>
+                        {{ registerform.name }}
+                        <label  class="form-label">Email</label>
+                        {{ registerform.email }}
                     </div>
                 </div>
-                <button type="button" class="btn  btn-info add-education"><span>&plus;</span></button>
-                <button type="submit" class="btn btn-warning ">Submit</button>
-            </form>
+            </div>
+        </div>  
+        {{ formset.management_form }}
+        <div id="formset">
+            {% for form in formset %}
+                <div class="form-row" data-row-id="{{ forloop.counter }}">
+                    <div class="card mt-3">
+                        <div class="card-body">
+                            <label  class="form-label">Degree</label>
+                            {{form.degree}}
+                            <label  class="form-label">University</label>
+                            {{form.university}}
+                            <label  class="form-label">Year</label>
+                            {{form.year}}
+                        </div>
+                    </div>
+                    <!-- <div class="col-md-9">
+                        {{ form.title }}
+                    </div> -->
+                    <div class="col-md-3">
+                        <button type="button" class="btn btn-info delete-row mt-3"><span>&minus;</span></button>
+                    </div>
+                </div>
+            {% endfor %}
         </div>
-        <div class="col-2"></div>
+        <div class="mb-2"></div>
+        <button id="add-more" class="btn btn-primary mb-3" type="button"><span>&plus;</span></button>
+        <button class="btn btn-primary mb-3" type="submit">Save</button>         
+    </form>
+    <!-- This hidden form is used as a template for adding new form fields. -->
+    <div id="empty_form" style="display: none;">
+        <div class="form-row">
+            <div class="card mt-3">
+                <div class="card-body">
+                    <label for="{{ formset.empty_form.degree.id_for_label }}" class="form-label">Degree</label>
+                    {{formset.empty_form.degree }}
+                    <label for="{{ formset.empty_form.degree.id_for_label }}" class="form-label">university</label>{{formset.empty_form.university }}
+                    <label for="{{ formset.empty_form.degree.id_for_label }}" class="form-label">year</label>{{formset.empty_form.year }}
+
+                </div>
+            </div>
+            <!-- <div class="col-md-9">
+                {{ formset.empty_form.title }}
+            </div> -->
+            <div class="col-md-3">
+                <button type="button" class="btn btn-info delete-row mt-3"><span>&minus;</span></button>
+            </div>
+        </div>
     </div>
+</div>
+<script>
+$(document).ready(function() {
+$('#add-more').click(function() {
+    var form_idx = $('#id_form-TOTAL_FORMS').val();
+    var new_form = $('#empty_form').html().replace(/__prefix__/g, form_idx);
+    $('#formset').append(new_form);
+    $('#id_form-TOTAL_FORMS').val(parseInt(form_idx) + 1);
+});
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const form = document.getElementById('myForm');
-            const educationSection = document.getElementById('education-section');
-            const initialRow = educationSection.querySelector('.education-input').cloneNode(true);
-
-            form.addEventListener('click', function (e) {
-                if (e.target.classList.contains('remove-education')) {
-                    e.preventDefault();
-                    if (educationSection.children.length > 1) {
-                        const educationInput = e.target.parentElement;
-                        educationSection.removeChild(educationInput);
-                    }
-                }
-
-                if (e.target.classList.contains('add-education')) {
-                    e.preventDefault();
-                    const newEducationInput = initialRow.cloneNode(true);
-
-                    // Clear input values in the new row
-                    newEducationInput.querySelectorAll('input').forEach(input => {
-                        input.value = '';
-                    });
-
-                    educationSection.appendChild(newEducationInput);
-                }
-            });
-        });
-    </script>    </body>
-
+$(document).on('click', '.delete-row', function() {
+    $(this).closest('.form-row').remove();
+});
+});
+</script>
+</body>
 </html>

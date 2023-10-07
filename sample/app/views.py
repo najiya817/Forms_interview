@@ -1,5 +1,4 @@
 from django.shortcuts import redirect, render
-from django import views
 from .models import *
 from .forms import *
 from .forms import *
@@ -16,7 +15,7 @@ def Home(request):
                     degree = form.cleaned_data["degree"]
                     university = form.cleaned_data["university"]
                     year = form.cleaned_data["year"]
-                    course = Courses(
+                    course = Courses.objects.create(
                         course_id=register, degree=degree, university=university, year=year
                     )
                     course.save()
