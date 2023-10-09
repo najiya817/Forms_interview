@@ -15,7 +15,14 @@ class RegisterForm(forms.ModelForm):
                 attrs={"class": "custom-email-widget form-control", "required": True}
             ),
         }
+    def clean(self):
+            cleaned_data = super().clean()
+            name = cleaned_data.get("name")
+            email = cleaned_data.get("email")
 
+            # Check for uniqueness of the combination of name and email
+            if Register.objects.filter(name=name, email=email).exclude(pk=self.instance.pk).exists():
+                raise forms.ValidationError("A user with this name and email already exists.")
 
 class CourseForm(forms.ModelForm):
     class Meta:
@@ -35,12 +42,14 @@ CourseFormset=formset_factory(CourseForm,extra=1)
 CourseModelFormset = modelformset_factory(
     Courses,
     fields=[
+         "id",
         "degree",
         "university",
         "year",
     ],
     extra=1,
     widgets={
+        'id': forms.HiddenInput(),
         "degree": forms.TextInput(
             attrs={"class": "form-control"}
         ),

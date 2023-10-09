@@ -12,7 +12,6 @@ def NewPage(request, student_id=1):
         try:
             student = Student.objects.get(id=student_id)
         except Student.DoesNotExist:
-        # Handle the case when the student does not exist
             return render(request, 'student_not_found.html', {'student_id': student_id})
 
         formset = CourseFormSet(request.POST)

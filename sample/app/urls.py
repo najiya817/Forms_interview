@@ -1,5 +1,8 @@
 from django.urls import path
 from .views import*
 urlpatterns=[
-    path('',Home,name='home')
+    path('home/',Home,name='home'),
+    path('',MainHome,name='mhome'),
+    path('list',RegisterList,name='rlist'),
+    path('edit/<int:reg_id>',RegisterUpdate.as_view(),name='ed'),
 ]
