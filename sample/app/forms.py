@@ -47,7 +47,7 @@ CourseModelFormset = modelformset_factory(
         "university",
         "year",
     ],
-    extra=1,
+    extra=0,
     widgets={
         'id': forms.HiddenInput(),
         "degree": forms.TextInput(

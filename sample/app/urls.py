@@ -5,4 +5,5 @@ urlpatterns=[
     path('',MainHome,name='mhome'),
     path('list',RegisterList,name='rlist'),
     path('edit/<int:reg_id>',RegisterUpdate.as_view(),name='ed'),
+    # path('del/<int:id>',CourseDelete.as_view(),name='del')
 ]
